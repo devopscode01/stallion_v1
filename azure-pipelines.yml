@@ -10,9 +10,9 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-- stage: RestorePackages
+- stage: BuildAndTest
   jobs:
-  - job: Restore
+  - job: BuildAndTestJob
     steps:
     - task: NuGetToolInstaller@1
 
@@ -20,11 +20,6 @@ stages:
       inputs:
         restoreSolution: '$(solution)'
 
-- stage: BuildAndTest
-  dependsOn: RestorePackages
-  jobs:
-  - job: Build
-    steps:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
@@ -32,9 +27,8 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
-  - job: Test
-    steps:
     - task: VSTest@2
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
+
